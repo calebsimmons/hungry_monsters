@@ -1,8 +1,11 @@
 import stochpy,random,re,sys
 sys.path.append("/home/calebsimmons/Hungry_Monsters/hungry_monsters")
+import pyximport; pyximport.install()
 from psc_parser import *
 from gill_alg import *
 #import networkx as nx
+
+
 class Chromosome(object):
     serial_no = 0
     mrna_cost = 0
@@ -32,13 +35,13 @@ class Chromosome(object):
             filename = "model%s.psc" % self.serial_no
             with open(filename,'w') as f:
                 f.write(model)
-        #mod = stochpy.SSA(Method="TauLeaping", File=filename,dir='.')
-        #mod.DoStochSim(epsilon=.05,end=timesteps,trajectories=1)
-        #atp_label = mod.data_stochsim.species_labels.index('ATP')
-        #self.cached_fitness = mod.data_stochsim.species[-1][atp_label]
-        mod = Parser(filename)
-        atp_label = getATP(stochsimm(mod.parse()))
-        self.cached_fitness = atp_label[-1]
+        mod = stochpy.SSA(Method="NextReactionMethod", File=filename,dir='.')
+        mod.DoStochSim(epsilon=.05,end=timesteps,trajectories=1)
+        atp_label = mod.data_stochsim.species_labels.index('ATP')
+        self.cached_fitness = mod.data_stochsim.species[-1][atp_label]
+        #mod2 = Parser(filename)
+        #atp_label2 = getATP(stochsimm(mod2.parse()))
+        #self.cached_fitness2 = atp_label2[-1]
         if verbose:
             print self.cached_fitness
         return self.cached_fitness

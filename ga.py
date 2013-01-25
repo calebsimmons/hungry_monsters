@@ -26,7 +26,7 @@ class GA(object):
                    key=lambda chromosome: chromosome.fitness())
                 for j in range(n)]
     
-    def iterate(self,iterations=2):
+    def iterate(self,iterations=1):
         for iteration in range(iterations):
             print("inside for loop")
             rates = [self.recombination_rate,self.mutation_rate,self.copy_rate]

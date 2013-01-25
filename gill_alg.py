@@ -1,42 +1,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import random, gmpy
+import random
 from math import *
 import operator as op
-from sympy import *
+from sympy import FallingFactorial
 
 
 
 
-def factorial(n):
-    """factorial(n): return the factorial of the integer n.
-    factorial(0) = 1
-    factorial(n) with n<0 is -factorial(abs(n))
-    """
-    result = 1
-    for i in xrange(1, abs(n)+1):
-        result *= i
-    if n >= 0:
-        return result
-    else:
-        return -result
-
+def ncr(n,k):
+    return reduce(lambda acc,m:acc*(n-k+m)/m, range(1,k+1),1) 
 
 #this is a helper function to calclate the combinitorial function "N choose k"
-def ncr(n,r):
-    if r == 0:
-        return n
-    elif n == 0:
-        return 0
-    elif r > n:
-        return 0
-    else:
-        return factorial(n)/(factorial(n-r)*factorial(r))
-#placeholder data
+#def ncr(n,r):
+#    if n < r:
+#        return 0
+#    elif n == r:
+#        return 1
+#    else:
+#        return int(FallingFactorial(n,r)/gamma(r+1))
 
-def parsed_data():
-    p = [[['a'],['b','c'],.01],[['b','c'],['a'],.01],{'a':10},{'b':0},{'c':0}]
-    return p
+
 
 def strings_to_floats(rate_list):
     l = [float(item) for item in rate_list]
@@ -100,12 +84,11 @@ def calcMu(a_0,r_2,a_sum):
 def calc_h(RList,X_i):
     h_mu=[]
     for reactants,products,rate in RList:
-        h_i = [ncr(X_i[species],reactants.count(species))
+        h_i = [ncr(int(X_i[species]),reactants.count(species))
                                     for species in set(reactants)]
         h_mu.append(reduce(op.mul,h_i,1))
     return h_mu
 
-     
 
 def stochsimm(PSCmodel):
 
@@ -131,8 +114,7 @@ def stochsimm(PSCmodel):
     # initial start time and reaction counter
     t = 0
     counter = 0
-
-
+    #h_mu = calc_h(RList,X_i)
 
     # define conditions for when algorithim is run
     while counter <= 10000:
@@ -167,22 +149,27 @@ def stochsimm(PSCmodel):
         reaction = RList[mu-1]
         for reactants in reaction[0]:
             X_i[reactants] -= 1
+        
         for products in reaction[1]:
             X_i[products] += 1
-
+    
+        
         pop.append(dict(X_i))
-                   
+    
         #reaction counter increases
         counter += 1
 
-    return pop
 
+    return pop
     #test code here
     
    
 def getATP(population):
     ATP = [X_i['ATP'] for X_i in population]
     return ATP
+
+
+    
 
 
     
