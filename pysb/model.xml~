@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1">
+        <model name="<interactive>">
+            <listOfCompartments>
+                <compartment id="default" name="default" spatialDimensions="3" size="1"/>
+            </listOfCompartments>
+            <listOfSpecies>
+            <species id="s0" metaid="metaid_s0" name="RichEnv()" compartment="default" initialAmount="0">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+                        <rdf:Description rdf:about="#metaid_s0">
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </species>
+            <species id="s1" metaid="metaid_s1" name="PoorEnv()" compartment="default" initialAmount="1">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+                        <rdf:Description rdf:about="#metaid_s1">
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </species>
+            <species id="s2" metaid="metaid_s2" name="S()" compartment="default" initialAmount="0">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+                        <rdf:Description rdf:about="#metaid_s2">
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </species>
+            <species id="s3" metaid="metaid_s3" name="__source()" compartment="default" initialAmount="1">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+                        <rdf:Description rdf:about="#metaid_s3">
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </species>
+            <species id="s4" metaid="metaid_s4" name="__sink()" compartment="default" initialAmount="0">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+                        <rdf:Description rdf:about="#metaid_s4">
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </species>
+        </listOfSpecies>
+        <listOfParameters>
+            <parameter id="sugar_entering_rate_rich" metaid="metaid_sugar_entering_rate_rich" name="sugar_entering_rate_rich" value="6000"/>
+            <parameter id="sugar_entering_rate_poor" metaid="metaid_sugar_entering_rate_poor" name="sugar_entering_rate_poor" value="60"/>
+            <parameter id="env_switch_rate" metaid="metaid_env_switch_rate" name="env_switch_rate" value="0.033333333333333333"/>
+            <parameter id="sugar_leaving_rate" metaid="metaid_sugar_leaving_rate" name="sugar_leaving_rate" value="1"/>
+        </listOfParameters>
+        <listOfReactions>
+            <reaction id="r0" metaid="metaid_r0" name="r0" reversible="false">
+                <listOfReactants>
+                    <speciesReference species="s0"/>
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="s0"/>
+                    <speciesReference species="s2"/>
+                </listOfProducts>
+                <kineticLaw><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><times/><ci>s0</ci><ci>sugar_entering_rate_rich</ci></
