@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-*.psc
-=======
+
 *.psc
 *.pyc
 _pys_parsetab.py
->>>>>>> 125f0d6e612d9236c787dc7461b716a15602660e
+
+
