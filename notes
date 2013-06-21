@@ -1,0 +1,60 @@
+Add all progress to this. Keep track by days.
+
+TODO:
+	=> Create sunburst from interaction.
+	-> Aggregate edges.
+	-> Clean up code. 
+
+
+6.20
+> Meeting with Patrick @ 10 a.m.
+6.19
+> Update sunburst from panel (including no sunburst)
+> Print and submit Camilla forms.
+> Start aggregating edges.
+6.18
+- Keqin emailed me Box-Cox paper. 
+- Adjusts nodes by variance within ring buffer. 
+- Commented Sunburst function.
+- Centered graph to avoid clipping.
+6.17
+- Swapped ancestor ring with child ring.
+- Added radio panel for sunburst settings. 
+
+
+Sunburst Slider:
+The radius of every node displayed is proportional to a metric.
+
+- Find each node's associated radius and variance.
+	> TreeRing has member array _ring. This collection has two fields:
+	> parallel arrays _node_variance and _radius. Both extend from i
+	> to _ring[n]._node_num for n to _num_layers. CV uses _node_cv and
+	> domain uses _node_domain.
+
+	> Sample code:
+	for (int layer = 0; layer < _num_layers; ++layer) {
+
+		Ring &ring = _ring[layer];
+		for (int i = 0; i < ring._node_num; i++) {
+
+			double var = ring._node_variance[i];
+			ring._radius[i] += var;
+		}
+	}
+
+- Pick sunburst from GLUT radio panel.
+	> User can pick No Sunburst or a metric. The sunburst pattern will
+	> repoistion itself in TreeRing. Command needs to be sent from
+	> main to CompoundGraph to TreeRing. Should emulate coloring
+	> process.
+	
+	> Problem #1: Calling TreeRing::UpdateSunburst() every render
+	> makes nodes unselectable.
+
+Consistency:
+	- Comment all classes, functions and logic.
+	- Keep consistent spacing and naming conventions.
+	- Fix spelling mistakes. (e.g. compoudgraph) 
+	- Add gesture to get from bible to graph.
+	- Certain patch of nodes doesn't highlight.
+	- Edges only reposition if source moves.
