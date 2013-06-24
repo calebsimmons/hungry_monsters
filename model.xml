@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with PySCeS (0.8.0rc1) on Mon, 24 Jun 2013 15:09:03 by calebsimmons -->
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1">
+  <model name="/home/calebsimmons/Hungry_Monsters/tiny_monsters/model0">
+    <listOfUnitDefinitions>
+      <unitDefinition id="volume" name="volume">
+        <listOfUnits>
+          <unit kind="litre" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="length" name="length">
+        <listOfUnits>
+          <unit kind="metre" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="substance" name="substance">
+        <listOfUnits>
+          <unit kind="mole" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="time" name="time">
+        <listOfUnits>
+          <unit kind="second" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="area" name="area">
+        <listOfUnits>
+          <unit kind="metre" exponent="2" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="Cell" name="Cell" size="1"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="P_protein" name="P_protein" compartment="Cell" initialConcentration="10" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="T_repressed_promoter" name="T_repressed_promoter" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="T_activated_promoter" name="T_activated_promoter" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="T_protein" name="T_protein" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="PoorEnv" name="PoorEnv" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="S" name="S" compartment="Cell" initialConcentration="100" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="RichEnv" name="RichEnv" compartment="Cell" initialConcentration="1" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="ATP" name="ATP" compartment="Cell" initialConcentration="10000" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="P_repressed_promoter" name="P_repressed_promoter" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="X_protein" name="X_protein" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="T_mrna" name="T_mrna" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="P_activated_promoter" name="P_activated_promoter" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="P_basal_promoter" name="P_basal_promoter" compartment="Cell" initialConcentration="1" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="X_basal_promoter" name="X_basal_promoter" compartment="Cell" initialConcentration="1" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="T_basal_promoter" name="T_basal_promoter" compartment="Cell" initialConcentration="1" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="P_mrna" name="P_mrna" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="Tstar_protein" name="Tstar_protein" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="X_mrna" name="X_mrna" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="X_activated_promoter" name="X_activated_promoter" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="X_repressed_promoter" name="X_repressed_promoter" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="activated_transcription_rate" name="activated_transcription_rate" value="0.099"/>
+      <parameter id="basal_transcription_rate" name="basal_transcription_rate" value="0.065"/>
+      <parameter id="repressed_transcription_rate" name="repressed_transcription_rate" value="0.031"/>
+      <parameter id="translation_rate" name="translation_rate" value="0.055"/>
+      <parameter id="mRNA_degradation_rate" name="mRNA_degradation_rate" value="0.0023"/>
+      <parameter id="protein_degradation_rate" name="protein_degradation_rate" value="0.0006"/>
+      <parameter id="T_activation_rate" name="T_activation_rate" value="100"/>
+      <parameter id="T_deactivation_rate" name="T_deactivation_rate" value="0.01"/>
+      <parameter id="sugar_eating_rate" name="sugar_eating_rate" value="500"/>
+      <parameter id="sugar_entering_rate_rich" name="sugar_entering_rate_rich" value="6000"/>
+      <parameter id="sugar_entering_rate_poor" name="sugar_entering_rate_poor" value="60"/>
+      <parameter id="env_switch_rate" name="env_switch_rate" value="0.1"/>
+      <parameter id="sugar_leaving_rate" name="sugar_leaving_rate" value="1"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="X_activated_transcription" name="X_activated_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="X_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="X_activated_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> activated_transcription_rate </ci>
+              <ci> X_activated_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="X_basal_transcription" name="X_basal_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="X_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="X_basal_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> basal_transcription_rate </ci>
+              <ci> X_basal_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="X_repressed_transcription" name="X_repressed_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="X_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="X_repressed_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> repressed_transcription_rate </ci>
+              <ci> X_repressed_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="X_translation" name="X_translation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="1560"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="X_protein" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="X_mrna"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> translation_rate </ci>
+              <ci> X_mrna </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 1560 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="X_mrna_deg" name="X_mrna_deg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="X_mrna" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> mRNA_degradation_rate </ci>
+              <ci> X_mrna </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="X_protein_deg" name="X_protein_deg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="X_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> protein_degradation_rate </ci>
+              <ci> X_protein </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="X_activates_P" name="X_activates_P" reversible="false">
+        <listOfReactants>
+          <speciesReference species="P_basal_promoter" stoichiometry="1"/>
+          <speciesReference species="X_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P_activated_promoter" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <cn> 1.13161263945 </cn>
+              <ci> X_protein </ci>
+              <ci> P_basal_promoter </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="X_unactivates_P" name="X_unactivates_P" reversible="false">
+        <listOfReactants>
+          <speciesReference species="P_activated_promoter" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P_basal_promoter" stoichiometry="1"/>
+          <speciesReference species="X_protein" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <cn> 1 </cn>
+              <ci> P_activated_promoter </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="T_activated_transcription" name="T_activated_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="T_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="T_activated_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> activated_transcription_rate </ci>
+              <ci> T_activated_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="T_basal_transcription" name="T_basal_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="T_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="T_basal_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> basal_transcription_rate </ci>
+              <ci> T_basal_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="T_repressed_transcription" name="T_repressed_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="T_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="T_repressed_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> repressed_transcription_rate </ci>
+              <ci> T_repressed_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="T_translation" name="T_translation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="1560"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="T_protein" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="T_mrna"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> translation_rate </ci>
+              <ci> T_mrna </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 1560 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="T_mrna_deg" name="T_mrna_deg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="T_mrna" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> mRNA_degradation_rate </ci>
+              <ci> T_mrna </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="T_protein_deg" name="T_protein_deg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="T_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> protein_degradation_rate </ci>
+              <ci> T_protein </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Tstar_protein_deg" name="Tstar_protein_deg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="Tstar_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> protein_degradation_rate </ci>
+              <ci> Tstar_protein </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="T_protein_activates" name="T_protein_activates" reversible="false">
+        <listOfReactants>
+          <speciesReference species="T_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Tstar_protein" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="S"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> T_activation_rate </ci>
+              <ci> T_protein </ci>
+              <ci> S </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Tstar_protein_inactivates" name="Tstar_protein_inactivates" reversible="false">
+        <listOfReactants>
+          <speciesReference species="Tstar_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="T_protein" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> T_deactivation_rate </ci>
+              <ci> Tstar_protein </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Tstar_activates_P" name="Tstar_activates_P" reversible="false">
+        <listOfReactants>
+          <speciesReference species="P_basal_promoter" stoichiometry="1"/>
+          <speciesReference species="Tstar_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P_activated_promoter" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <cn> 0.815676846776 </cn>
+              <ci> Tstar_protein </ci>
+              <ci> P_basal_promoter </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Tstar_unactivates_P" name="Tstar_unactivates_P" reversible="false">
+        <listOfReactants>
+          <speciesReference species="P_activated_promoter" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P_basal_promoter" stoichiometry="1"/>
+          <speciesReference species="Tstar_protein" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <cn> 1 </cn>
+              <ci> P_activated_promoter </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Tstar_activates_X" name="Tstar_activates_X" reversible="false">
+        <listOfReactants>
+          <speciesReference species="X_basal_promoter" stoichiometry="1"/>
+          <speciesReference species="Tstar_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="X_activated_promoter" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <cn> 0.474918554789 </cn>
+              <ci> Tstar_protein </ci>
+              <ci> X_basal_promoter </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Tstar_unactivates_X" name="Tstar_unactivates_X" reversible="false">
+        <listOfReactants>
+          <speciesReference species="X_activated_promoter" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="X_basal_promoter" stoichiometry="1"/>
+          <speciesReference species="Tstar_protein" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <cn> 1 </cn>
+              <ci> X_activated_promoter </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="P_activated_transcription" name="P_activated_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="P_activated_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> activated_transcription_rate </ci>
+              <ci> P_activated_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="P_basal_transcription" name="P_basal_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="P_basal_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> basal_transcription_rate </ci>
+              <ci> P_basal_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="P_repressed_transcription" name="P_repressed_transcription" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="2700"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P_mrna" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="P_repressed_promoter"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> repressed_transcription_rate </ci>
+              <ci> P_repressed_promoter </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 2700 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="P_translation" name="P_translation" reversible="false">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="1560"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="P_protein" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="P_mrna"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> translation_rate </ci>
+              <ci> P_mrna </ci>
+              <apply>
+                <divide/>
+                <ci> ATP </ci>
+                <cn> 1560 </cn>
+              </apply>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="P_mrna_deg" name="P_mrna_deg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="P_mrna" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> mRNA_degradation_rate </ci>
+              <ci> P_mrna </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="P_protein_deg" name="P_protein_deg" reversible="false">
+        <listOfReactants>
+          <speciesReference species="P_protein" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> protein_degradation_rate </ci>
+              <ci> P_protein </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="P_eats_sugar" name="P_eats_sugar" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ATP" stoichiometry="36"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="P_protein"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> sugar_eating_rate </ci>
+              <ci> P_protein </ci>
+              <ci> S </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Sugar_enters_system_Rich" name="Sugar_enters_system_Rich" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="RichEnv"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> sugar_entering_rate_rich </ci>
+              <ci> RichEnv </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Sugar_enters_system_Poor" name="Sugar_enters_system_Poor" reversible="false">
+        <listOfProducts>
+          <speciesReference species="S" stoichiometry="1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference species="PoorEnv"/>
+        </listOfModifiers>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> sugar_entering_rate_poor </ci>
+              <ci> PoorEnv </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Rich_to_Poor" name="Rich_to_Poor" reversible="false">
+        <listOfReactants>
+          <speciesReference species="RichEnv" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="PoorEnv" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> env_switch_rate </ci>
+              <ci> RichEnv </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Poor_to_Rich" name="Poor_to_Rich" reversible="false">
+        <listOfReactants>
+          <speciesReference species="PoorEnv" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="RichEnv" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> env_switch_rate </ci>
+              <ci> PoorEnv </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Sugar_leaves_system" name="Sugar_leaves_system" reversible="false">
+        <listOfReactants>
+          <speciesReference species="S" stoichiometry="1"/>
+        </listOfReactants>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> sugar_leaving_rate </ci>
+              <ci> S </ci>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>
