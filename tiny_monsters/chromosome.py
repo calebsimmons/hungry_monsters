@@ -27,7 +27,7 @@ class Chromosome(object):
         Chromosome.serial_no += 1
         
     def fitness(self,verbose=True):
-        time = 7
+        time = 10
         if not self.cached_fitness is None:
             return self.cached_fitness
         with open("/home/calebsimmons/Hungry_Monsters/tiny_monsters/template.psc") as f:
@@ -50,7 +50,7 @@ class Chromosome(object):
             except:
                 continue
 
-        #mod.PlotTimeSim(species2plot=["ATP",'P_protein'])
+        mod.PlotTimeSim(species2plot=["ATP",'P_protein'])
         #mod2 = Parser(filename)
         #atp_label2 = getATP(stochsimm(mod2.parse()))
         #self.cached_fitness2 = atp_label2[-1]

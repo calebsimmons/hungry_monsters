@@ -1,6 +1,6 @@
 import random
 import sys
-sys.path.append("/home/calebsimmons/Hungry_Monsters/hungry_monsters")
+sys.path.append("/home/calebsimmons/Hungry_Monsters/tiny_monsters")
 from chromosome import Chromosome
 from utils import *
 from matplotlib import pyplot as plt
@@ -26,7 +26,7 @@ class GA(object):
                    key=lambda chromosome: chromosome.fitness())
                 for j in range(n)]
     
-    def iterate(self,iterations=1):
+    def iterate(self,iterations=10):
         for iteration in range(iterations):
             print("inside for loop")
             rates = [self.recombination_rate,self.mutation_rate,self.copy_rate]
