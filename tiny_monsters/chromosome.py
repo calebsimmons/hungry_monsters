@@ -27,7 +27,7 @@ class Chromosome(object):
         Chromosome.serial_no += 1
         
     def fitness(self,verbose=True):
-        time = 300
+        time = 7
         if not self.cached_fitness is None:
             return self.cached_fitness
         with open("/home/calebsimmons/Hungry_Monsters/tiny_monsters/template.psc") as f:
@@ -41,19 +41,23 @@ class Chromosome(object):
             filename = "/home/calebsimmons/Hungry_Monsters/tiny_monsters/model%s.psc" % self.serial_no
             with open(filename,'w') as f:
                 f.write(model)
-        mod = stochpy.SSA(Method="Direct", File=filename,dir='.')
-        mod.DoStochSim(epsilon=1,mode="time",end=time)
-        mod.PlotTimeSim(species2plot=["ATP"])
-        atp_label = mod.data_stochsim.species_labels.index('ATP')
-        self.cached_fitness = mod.data_stochsim.species[-1][atp_label]
+        while self.cached_fitness == None:
+            try:
+                mod = stochpy.SSA(Method="NextReactionMethod", File=filename,dir='.')
+                mod.DoStochSim(epsilon=.01,mode="time",end=time)   
+                atp_label = mod.data_stochsim.species_labels.index('ATP')
+                self.cached_fitness = mod.data_stochsim.species[-1][atp_label]
+            except:
+                continue
+
+        #mod.PlotTimeSim(species2plot=["ATP",'P_protein'])
         #mod2 = Parser(filename)
         #atp_label2 = getATP(stochsimm(mod2.parse()))
         #self.cached_fitness2 = atp_label2[-1]
-        #mod3 = pysces.model(filename,dir='/home/calebsimmons/Hungry_Monsters/hungry_monsters')
-        #mod3.mode_integrator="CVODE"
-        #mod3.doSim(end = 60 , points = 3000)
-        #mod3.SimPlot(plot=["ATP"])
-        self.cached_fitness3 = mod3.data_sim.getSimData("ATP")[-1][1]
+        #mod3 = pysces.model(filename,dir='.')
+        #mod3.doSim(end = 1200 , points = 1000)
+        #mod3.SimPlot(plot=["ATP",'S'])
+        #self.cached_fitness3 = mod3.data_sim.getSimData("ATP")[-1][1]
         if verbose:
             print self.cached_fitness
         return self.cached_fitness
