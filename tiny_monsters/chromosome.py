@@ -17,7 +17,7 @@ class Chromosome(object):
     sugar_benefit = 36
     num_params = 3
     
-    def __init__(self,genotype=None):
+    def __init__(self,genotype=None, simulate=False):
         if genotype is None:
             self.genotype = [random.lognormvariate(0,1) for i in range(Chromosome.num_params)]
         else:
@@ -25,6 +25,9 @@ class Chromosome(object):
         self.cached_fitness = None
         self.serial_no = Chromosome.serial_no
         Chromosome.serial_no += 1
+		
+		if simulate:
+			fitness()
         
     def fitness(self,verbose=True):
         time = 10
