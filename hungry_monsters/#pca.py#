@@ -1,9 +1,0 @@
-import mdp
-C=mdp.pca(np.matrix([[1.0,2.0,3.0],[4.0,5.0,6.0],[7.0,8.0,9.0]]),reduce='True')
-print C
-
-import matplotlib.pyplot as plt
-
-plt.plot(C[2,:C.shape[1]], C[1,:C.shape[1]], 'r*')
-plt.show()
-
