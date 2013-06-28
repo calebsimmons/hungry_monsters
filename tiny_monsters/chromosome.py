@@ -25,9 +25,9 @@ class Chromosome(object):
         self.cached_fitness = None
         self.serial_no = Chromosome.serial_no
         Chromosome.serial_no += 1
-		
-		if simulate:
-			fitness()
+        
+        if simulate:
+            fitness()
         
     def fitness(self,verbose=True):
         time = 10
