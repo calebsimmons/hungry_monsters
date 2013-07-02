@@ -27,4 +27,4 @@ Dependencies:
 Install from Ubuntu:
 --------------------
 
-   sudo apt-get install python-numpy python-scipy python-matplotlib python-sympy 
+   	sudo apt-get install python-numpy python-scipy python-matplotlib python-sympy 
