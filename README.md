@@ -24,5 +24,7 @@ Dependencies:
   [6]: http://docs.cython.org/0.15/src/quickstart/install.html
   [7]: http://stackoverflow.com/questions/4783810/install-tkinter-for-python
 
+Install from Ubuntu:
+--------------------
 
    sudo apt-get install python-numpy python-scipy python-matplotlib python-sympy 
