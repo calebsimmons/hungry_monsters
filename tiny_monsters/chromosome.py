@@ -1,9 +1,7 @@
 import sys
-sys.path.append("/usr/local/bin")
-import stochpy,random,re,pysces
-sys.path.append("/home/calebsimmons/Hungry_Monsters/tiny_monsters")
 from psc_parser import *
 from gill_alg import *
+import stochpy,random,re,pysces
 #import networkx as nx
 
 
@@ -27,13 +25,13 @@ class Chromosome(object):
         Chromosome.serial_no += 1
         
         if simulate:
-            fitness()
+            self.fitness()
         
     def fitness(self,verbose=True):
         time = 10
         if not self.cached_fitness is None:
             return self.cached_fitness
-        with open("/home/calebsimmons/Hungry_Monsters/tiny_monsters/template.psc") as f:
+        with open("template.psc") as f:
             template = "".join(f.readlines())
             model = (template % tuple(self.genotype))\
                 .replace("alpha",str(Chromosome.mrna_cost))\
@@ -41,7 +39,7 @@ class Chromosome(object):
                 .replace("gamma",str(Chromosome.sugar_benefit))\
                 .replace("delta",str(Chromosome.enzyme_mrna_cost))\
                 .replace('zeta',str(Chromosome.enzyme_cost))
-            filename = "/home/calebsimmons/Hungry_Monsters/tiny_monsters/model%s.psc" % self.serial_no
+            filename = "model%s.psc" % self.serial_no
             with open(filename,'w') as f:
                 f.write(model)
         while self.cached_fitness == None:
@@ -53,7 +51,7 @@ class Chromosome(object):
             except:
                 continue
 
-        mod.PlotTimeSim(species2plot=["ATP",'P_protein'])
+        #mod.PlotTimeSim(species2plot=["ATP",'P_protein'])
         #mod2 = Parser(filename)
         #atp_label2 = getATP(stochsimm(mod2.parse()))
         #self.cached_fitness2 = atp_label2[-1]
