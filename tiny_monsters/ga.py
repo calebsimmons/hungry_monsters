@@ -1,8 +1,7 @@
 import random
-import sys
-sys.path.append("/home/calebsimmons/Hungry_Monsters/tiny_monsters")
-from chromosome import Chromosome
 from utils import *
+import sys
+from chromosome import Chromosome
 from matplotlib import pyplot as plt
 
 class GA(object):
