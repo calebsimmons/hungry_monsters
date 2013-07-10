@@ -11,10 +11,10 @@ def main():
 
     # Set of simulated chromosomes
     data = list()
-    C = [Chromosome(simulate=True) for x in range (num_simulations)]
-    for chromosome in C:
-       #fitness, serial, K = vars(chromosome).values()
-        data.append(vars(chromosome).values())
+
+    # Simulate
+    g = GA()
+    g.iterate()
          
     # Finish up
     end_time = time.time()
