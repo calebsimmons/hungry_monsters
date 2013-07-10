@@ -1,6 +1,6 @@
 import sys
-from psc_parser import *
-from gill_alg import *
+#from psc_parser import *
+#from gill_alg import *
 import stochpy,random,re,pysces
 #import networkx as nx
 
@@ -31,6 +31,23 @@ class Chromosome(object):
         time = 10
         if not self.cached_fitness is None:
             return self.cached_fitness
+
+#        with open ("template.psc") as f:
+#            template = f.read()
+#            model = template % tuple(self.genotype)
+#            replace = {
+#                'alpha': Chromosome.mrna_cost,
+#                'beta': Chromosome.protein_cost,
+#                'gamma': Chromosome.sugar_benefit,
+#                'delta': Chromosome.enzyme_mrna_cost,
+#                'zeta': Chromosome.enzyme_cost
+#                }
+#            for k, v in replace.iteritems():
+#                model.replace (k, str(v))
+#            filename = "model%s.psc" % self.serial_no
+#            with open (filename, 'w') as f:
+#                f.write (model)
+
         with open("template.psc") as f:
             template = "".join(f.readlines())
             model = (template % tuple(self.genotype))\
@@ -44,11 +61,11 @@ class Chromosome(object):
                 f.write(model)
         while self.cached_fitness == None:
             try:
-                mod = stochpy.SSA(Method="NextReactionMethod", File=filename,dir='.')
+                mod = stochpy.SSA(Method="Direct", File=filename,dir='.')
                 mod.DoStochSim(epsilon=.01,mode="time",end=time)   
                 atp_label = mod.data_stochsim.species_labels.index('ATP')
                 self.cached_fitness = mod.data_stochsim.species[-1][atp_label]
-            except:
+            except AssertionError:
                 continue
 
         #mod.PlotTimeSim(species2plot=["ATP",'P_protein'])
