@@ -1,8 +1,12 @@
 import sys
-#from psc_parser import *
-#from gill_alg import *
-import stochpy,random,re,pysces
-#import networkx as nx
+import random
+import re
+import os
+# Save CWD
+CWD = os.getcwd()
+
+import stochpy
+import pysces
 
 
 class Chromosome(object):
@@ -15,7 +19,7 @@ class Chromosome(object):
     sugar_benefit = 36
     num_params = 3
     
-    def __init__(self,genotype=None, simulate=False):
+    def __init__(self,genotype=None, simulate=False, keep_path=True):
         if genotype is None:
             self.genotype = [random.lognormvariate(0,1) for i in range(Chromosome.num_params)]
         else:
@@ -26,7 +30,9 @@ class Chromosome(object):
         
         if simulate:
             self.fitness()
-        
+        if keep_path:
+            os.chdir(CWD)
+
     def fitness(self,verbose=True):
         time = 10
         if not self.cached_fitness is None:
