@@ -45,6 +45,9 @@ class GA(object):
 
     def generation(self):
         return len(self.history)
+
+    def get_population(self):
+        return self.population
     
     def fitnesses(self):
         return [c.fitness() for c in self.population]
