@@ -1,12 +1,9 @@
-import sys
-import random
-import re
-import os
-# Save CWD
-CWD = os.getcwd()
-
-import stochpy
-import pysces
+import sys,os
+os.chdir('/home/caleb/Hungry_Monsters/tiny_monsters')
+#from psc_parser import *
+#from gill_alg import *
+import stochpy,random,re,pysces
+#import networkx as nx
 
 
 class Chromosome(object):
@@ -19,7 +16,7 @@ class Chromosome(object):
     sugar_benefit = 36
     num_params = 3
     
-    def __init__(self,genotype=None, simulate=False, keep_path=True):
+    def __init__(self,genotype=None, simulate=False):
         if genotype is None:
             self.genotype = [random.lognormvariate(0,1) for i in range(Chromosome.num_params)]
         else:
@@ -30,11 +27,9 @@ class Chromosome(object):
         
         if simulate:
             self.fitness()
-        if keep_path:
-            os.chdir(CWD)
-
+        
     def fitness(self,verbose=True):
-        time = 10
+        time = 100
         if not self.cached_fitness is None:
             return self.cached_fitness
 
@@ -65,16 +60,18 @@ class Chromosome(object):
             filename = "model%s.psc" % self.serial_no
             with open(filename,'w') as f:
                 f.write(model)
+       
         while self.cached_fitness == None:
             try:
                 mod = stochpy.SSA(Method="Direct", File=filename,dir='.')
                 mod.DoStochSim(epsilon=.01,mode="time",end=time)   
-                atp_label = mod.data_stochsim.species_labels.index('ATP')
-                self.cached_fitness = mod.data_stochsim.species[-1][atp_label]
+                atp_gained_label = mod.data_stochsim.species_labels.index('ATP_gained')
+                atp_spent_label = mod.data_stochsim.species_labels.index('ATP_spent')
+                self.cached_fitness = mod.data_stochsim.species[-1][atp_gained_label] - mod.data_stochsim.species[-1][atp_spent_label]
             except AssertionError:
                 continue
 
-        #mod.PlotTimeSim(species2plot=["ATP",'P_protein'])
+        mod.PlotTimeSim(species2plot=["ATP_gained",'ATP_spent'])
         #mod2 = Parser(filename)
         #atp_label2 = getATP(stochsimm(mod2.parse()))
         #self.cached_fitness2 = atp_label2[-1]
