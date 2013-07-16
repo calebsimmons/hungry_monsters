@@ -1,19 +1,19 @@
 # basic gene parameters for X
 # transcription rates
 X_activated_transcription:
-    X_activated_promoter + {alpha} ATP > X_activated_promoter + X_mrna
-    activated_transcription_rate * X_activated_promoter * (ATP/alpha)
+    X_activated_promoter > X_activated_promoter + X_mrna + {alpha} ATP_spent
+    activated_transcription_rate * X_activated_promoter
 X_basal_transcription:
-    X_basal_promoter + {alpha} ATP > X_basal_promoter + X_mrna
-    basal_transcription_rate * X_basal_promoter * (ATP/alpha)
+    X_basal_promoter > X_basal_promoter + X_mrna + {alpha} ATP_spent
+    basal_transcription_rate * X_basal_promoter
 X_repressed_transcription:
-    X_repressed_promoter + {alpha} ATP > X_repressed_promoter + X_mrna
-    repressed_transcription_rate * X_repressed_promoter * (ATP/alpha)
+    X_repressed_promoter > X_basal_promoter + X_mrna + {alpha} ATP_spent
+    repressed_transcription_rate * X_repressed_promoter
 
 # translation rates
 X_translation:
-    X_mrna + {beta} ATP > X_mrna + X_protein
-    translation_rate * X_mrna * (ATP/beta)
+    X_mrna > X_mrna + X_protein + {beta} ATP_spent
+    translation_rate * X_mrna
 # degredation rates
 X_mrna_deg:
     X_mrna > $pool
@@ -37,18 +37,18 @@ X_unactivates_P:
 # basic gene parameters for T
 # transcription rates
 T_activated_transcription:
-    T_activated_promoter + {alpha} ATP > T_activated_promoter + T_mrna
-    activated_transcription_rate * T_activated_promoter * (ATP/alpha)
+    T_activated_promoter > T_activated_promoter + T_mrna + {alpha} ATP_spent
+    activated_transcription_rate * T_activated_promoter
 T_basal_transcription:
-    T_basal_promoter + {alpha} ATP > T_basal_promoter + T_mrna
-    basal_transcription_rate * T_basal_promoter * (ATP/alpha)
+    T_basal_promoter > T_basal_promoter + T_mrna + {alpha} ATP_spent
+    basal_transcription_rate * T_basal_promoter
 T_repressed_transcription:
-    T_repressed_promoter + {alpha} ATP > T_repressed_promoter + T_mrna
-    repressed_transcription_rate * T_repressed_promoter * (ATP/alpha)
+    T_repressed_promoter > T_repressed_promoter + T_mrna + {alpha} ATP_spent
+    repressed_transcription_rate * T_repressed_promoter
 # translation rates
 T_translation:
-    T_mrna + {beta} ATP > T_mrna + T_protein
-    translation_rate * T_mrna * (ATP/beta) 
+    T_mrna > T_mrna + T_protein + {beta} ATP_spent
+    translation_rate * T_mrna
 # degredation rates
 T_mrna_deg:
     T_mrna > $pool
@@ -88,19 +88,19 @@ Tstar_unactivates_X:
 # basic gene parameters for "eating protein" P
 # transcription rates
 P_activated_transcription:
-    P_activated_promoter + {delta} ATP > P_activated_promoter + P_mrna
-    activated_transcription_rate * P_activated_promoter * (ATP/delta)
+    P_activated_promoter > P_activated_promoter + P_mrna + {delta} ATP_spent
+    activated_transcription_rate * P_activated_promoter
 P_basal_transcription:
-    P_basal_promoter + {delta} ATP > P_basal_promoter + P_mrna
-    basal_transcription_rate * P_basal_promoter *(ATP/delta) 
+    P_basal_promoter > P_basal_promoter + P_mrna + {delta} ATP_spent
+    basal_transcription_rate * P_basal_promoter
 P_repressed_transcription:
-    P_repressed_promoter + {delta} ATP > P_repressed_promoter + P_mrna
-    repressed_transcription_rate * P_repressed_promoter *(ATP/delta)
+    P_repressed_promoter > P_repressed_promoter + P_mrna + {delta} ATP_spent
+    repressed_transcription_rate * P_repressed_promoter 
 
 # translation rates
 P_translation:
-    P_mrna + {zeta} ATP > P_mrna + P_protein
-    translation_rate * P_mrna *(ATP/zeta)
+    P_mrna > P_mrna + P_protein + {zeta} ATP_spent
+    translation_rate * P_mrna
 # degredation rates
 P_mrna_deg:
     P_mrna > $pool
@@ -112,7 +112,7 @@ P_protein_deg:
 
 # P special interactions:
 P_eats_sugar:
-    P_protein + S > P_protein + {gamma} ATP
+    P_protein + S > P_protein + {gamma} ATP_gained
     sugar_eating_rate * P_protein * S
 
 # interactions with other genes:
@@ -121,11 +121,11 @@ P_eats_sugar:
 # Sugar interactions
 
 Sugar_enters_system_Rich:
-    RichEnv > S + RichEnv
+    RichEnv > {600} S + RichEnv
     sugar_entering_rate_rich*RichEnv
 
 Sugar_enters_system_Poor:
-    PoorEnv >  S + PoorEnv
+    PoorEnv > {6} S + PoorEnv
     sugar_entering_rate_poor*PoorEnv
 
 Rich_to_Poor:
@@ -147,10 +147,10 @@ repressed_transcription_rate = 0.031
 translation_rate = 0.055
 protein_degradation_rate = 0.0006
 mRNA_degradation_rate = 0.0023
-sugar_entering_rate_rich = 600
-sugar_entering_rate_poor = 6
+sugar_entering_rate_rich = 1
+sugar_entering_rate_poor = 1
 sugar_leaving_rate = 1
-sugar_eating_rate = 500
+sugar_eating_rate = 25
 #sugar_eating_rate_rich = 500
 #sugar_eating_rate_poor = 5
 env_switch_rate = 0.1
@@ -188,5 +188,5 @@ P_protein = 1
 S = 100
 RichEnv=1
 PoorEnv=0
-ATP = 100
-
+ATP_gained = 0
+ATP_spent = 0
