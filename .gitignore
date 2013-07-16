@@ -1,8 +1,5 @@
-
-
-
-*.psc
+*#
+*~
 *.pyc
 _pys_parsetab.py
-
-
+infix_tabmodule.py
