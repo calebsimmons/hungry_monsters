@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with PySCeS (0.8.0rc1) on Thu, 18 Jul 2013 17:57:50 by alex -->
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1">
+  <model name="alon">
+    <listOfUnitDefinitions>
+      <unitDefinition id="volume" name="volume">
+        <listOfUnits>
+          <unit kind="litre" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="length" name="length">
+        <listOfUnits>
+          <unit kind="metre" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="substance" name="substance">
+        <listOfUnits>
+          <unit kind="mole" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="time" name="time">
+        <listOfUnits>
+          <unit kind="second" exponent="1" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+      <unitDefinition id="area" name="area">
+        <listOfUnits>
+          <unit kind="metre" exponent="2" scale="0" multiplier="1" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfCompartments>
+      <compartment id="Cell" name="Cell" size="1"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="Y" name="Y" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="X" name="X" compartment="Cell" initialConcentration="100" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="X_a" name="X_a" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="S_y" name="S_y" compartment="Cell" initialConcentration="1000" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="S_x" name="S_x" compartment="Cell" initialConcentration="1000" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="Z" name="Z" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+      <species id="Y_a" name="Y_a" compartment="Cell" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <parameter id="Beta_x" name="Beta_x" value="1"/>
+      <parameter id="Beta_y" name="Beta_y" value="1"/>
+      <parameter id="Beta_z" name="Beta_z" value="1"/>
+      <parameter id="K_xz" name="K_xz" value="10"/>
+      <parameter id="K_yz" name="K_yz" value="10"/>
+      <parameter id="K_xy" name="K_xy" value="10"/>
+    </listOfParameters>
+    <listOfReactions>
+      <reaction id="activates_X" name="activates_X" reversible="false">
+        <listOfReactants>
+          <speciesReference species="X" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="X_a" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <ci> Beta_x </ci>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="production_Y" name="production_Y" reversible="false">
+        <listOfProducts>
+          <speciesReference species="Y" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> Beta_y </ci>
+              <cn> 2 </cn>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="activates_Y" name="activates_Y" reversible="false">
+        <listOfReactants>
+          <speciesReference species="Y" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Y_a" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <ci> Beta_y </ci>
+          </math>
+        </kineticLaw>
+      </reaction>
+      <reaction id="activates_Z" name="activates_Z" reversible="false">
+        <listOfProducts>
+          <speciesReference species="Z" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <times/>
+              <ci> Beta_z </ci>
+              <cn> 2 </cn>
+              <cn> 2 </cn>
+            </apply>
+          </math>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>
