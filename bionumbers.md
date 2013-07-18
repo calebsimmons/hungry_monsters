@@ -2,7 +2,7 @@ Bionumbers:
 ---
 | Property | Value | ID | 
 |----------|-------|----|
-| min. generation time | 20 min | 103514 |
+| min. generation time | 20 min | [103514](http://bionumbers.hms.harvard.edu/bionumber.aspx?&id=103514) |
 | 1 aa | ~ 3 nt | 108488 | 
 | avg. translation | 8 aa/s | 108488 | 
 | transcription | 25 nt/s | 108488 |
