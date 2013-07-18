@@ -1,6 +1,7 @@
-# Models C1-FF1
+# Models C1-FF1. Each '2.0' represents a placeholder to be filled in manually in
+# SBML file.
 
-# First, a signal S_x activates protein X. X_a is the active X protein.
+# First, a signal S_x activates protein X. X_a is the actived X protein.
 activates_X: 
     X + S_x > X_a + S_x
     Beta_x
