@@ -30,7 +30,6 @@ Raises error "ParseError" on a fatal parsing error.
 """
 
 ParseError="Parsing error"
-
 class Parser(object):
     """Parser class
 Has constructor:
@@ -528,3 +527,11 @@ if __name__=='__main__':
         sys.stderr.write('\n\n Unknown parsing error!\n')
         sys.exit(1)
     
+def parse (string):
+    SBML = Parser ().parse (string)
+    s = SBML.toSBML().split ('\n')
+    s[0] = """
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+    """.strip()
+    return '\n'.join (s)
