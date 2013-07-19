@@ -1,9 +1,9 @@
 Creating a model:
 ---
 
-Model is written in SBML-shorthand. Here is the [specification](http://www.staff.ncl.ac.uk/d.j.wilkinson/software/sbml-sh/all.html).
+The model is written in SBML-shorthand. Here is the [language specification](http://www.staff.ncl.ac.uk/d.j.wilkinson/software/sbml-sh/all.html).
 
-To model the reaction `A > B`:
+For examle, to model the reaction `A > B` from the file `sample.mod`:
 
     @model:2.4.1=MyModel
     @compartments
