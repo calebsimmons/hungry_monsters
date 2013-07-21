@@ -3,7 +3,7 @@ Creating a model:
 
 The model is written in SBML-shorthand. Here is the [language specification](http://www.staff.ncl.ac.uk/d.j.wilkinson/software/sbml-sh/all.html).
 
-For examle, to model the reaction `A > B` from the file `sample.mod`:
+For examle, to model the reaction `A > B` for the file `sample.mod`:
 
     @model:2.4.1=MyModel
     @compartments
