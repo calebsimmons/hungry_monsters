@@ -80,9 +80,6 @@
   X + S_x -> X_a
   X * gt(S_x, 1) * gt(X, 0)
 
-@r=degradation_X
-  X_a ->
-  Alpha_TF * X_a
 
 # Second, the activated TF binds to Y's promoter region to produce protein Y. In
 # parallel, X_a binds to Z's promoter region. Y production can begin when X_a
@@ -91,9 +88,6 @@
   X_a -> Y + X_a + ATP_spent
   Beta_TF * gt(X_a, K_xy)
 
-@r=degradation_Y
-  Y_a ->
-  Alpha_TF * Y_a
 
 # Signal S_y must accumulate for Y to be activated. This results in a delay for
 # production of Z.
@@ -107,10 +101,26 @@
   X_a + Y_a -> Z + X_a + Y_a + 10 ATP_spent
   Beta_Enz * gt(X_a, K_xz) * gt(Y_a, K_yz)
 
-@r=degradation_Z
-  Z -> 
-  Alpha_Enz * Z
-
 @r=production_ATP
   Z + S_x -> Z + ATP_gained
   gt(Z, 0) * gt(S_x, 0)
+
+@r=degradation_X
+  X ->
+  Alpha_TF * X
+  
+@r=degradation_X_a
+  X_a ->
+  Alpha_TF * X_a
+  
+@r=degradation_Y
+  Y ->
+  Alpha_TF * Y
+  
+@r=degradation_Y_a
+  Y_a ->
+  Alpha_TF * Y_a
+  
+@r=degradation_Z
+  Z ->
+  Alpha_Enz * Z
