@@ -1,7 +1,7 @@
 Creating a model:
 ---
 
-The model is written in SBML-shorthand. Here is the [language specification](http://www.staff.ncl.ac.uk/d.j.wilkinson/software/sbml-sh/all.html).
+The model is written in SBML-shorthand. Here is the [language specification](http://www.staff.ncl.ac.uk/d.j.wilkinson/software/sbml-sh/2.4.1/sbml-sh.pdf).
 
 For examle, to model the reaction `A > B` for the file `sample.mod`:
 
