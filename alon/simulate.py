@@ -47,8 +47,8 @@ def simulate (sbml_sh):
     command = """
         simulateSBML -t {time} -s {steps} -l -m 3 {file_name}
     """.format (
-        time=7200, 
-        steps=30,  
+        time=13999, 
+        steps=1,  
         file_name=temp.name
         ).strip()
     subprocess.call (command.split (' '))
