@@ -6,15 +6,15 @@
 # Inital concentrations of reactants:
 @species
 # Signals  
-  default:S_x = 0
+  default:S_x = 1
   default:S_y = 1
 
 # Proteins 
-  default:X = 20
+  default:X = 0 
   default:X_a = 0
-  default:Y = 20
+  default:Y = 0 
   default:Y_a = 0
-  default:Z = 20
+  default:Z = 0 
 
 # ATP 
   default:ATP_gained = 0
@@ -83,6 +83,9 @@
   X + S_x -> X_a + S_x
   X * gt(S_x, 0) * gt(X, 0)
 
+@r=unbinding_X
+  X_a -> X
+  X_a * lt(S_x, 0) * gt(X_a, 0)
 # Second, the activated TF binds to Y's promoter region to produce protein Y. In
 # parallel, X_a binds to Z's promoter region. Y production can begin when X_a
 # builds up past Y's activation threshold K_xy.
@@ -94,13 +97,17 @@
 # production of Z.
 @r=activates_Y
   Y + S_y -> Y_a + S_y
-  Y * gt(S_y, 0) * gt(Y, 0)
+  Y * gt(S_x, 0) * gt(Y, 0)
+
+@r=unbinding_Y
+  Y_a -> Y
+  Y_a * lt(S_x, 0) * gt(Y_a, 0)
 
 # Production of Z begins when activated X and Y accumulate past a certain
 # concentration. 
 @r=production_Z 
   X_a + Y_a -> Z + X_a + Y_a + 13 ATP_spent
-  Beta_Enz * gt(X_a, K_xz) * gt(Y_a, K_yz) + Beta_B
+  Beta_Enz * gt(X_a, K_xz) * gt(Y_a, K_yz)
 
 @r=production_ATP
   Z + S_x -> Z + 3 ATP_gained + S_x
@@ -129,5 +136,8 @@
 
 # Pulse distribution.
 @events
-  on=  t > 620 ; 4320 : S_x = 1
-  off= t > 2000 : S_x = 0
+  on1  =  t > 720 : S_x = 1
+  off1 =  t > 900 : S_x = -1 
+  on2  =  t > 2162 : S_x = 1
+  off2 =  t > 2342 : S_x = -1
+  on3  =  t > 4324 : S_x = 1
