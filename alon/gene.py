@@ -98,6 +98,17 @@ class Gene:
         # Merge the results.
         self.population = t1.population + t2.population  
 
+    def threaded_simulate (self, thread):
+        
+        half = int (POP_SIZE / 2)
+        start = 0 if thread == 1 else half
+        end = start + half
+        population = self.population [start:end]
+        for c in population:
+            print c.genotype
+            c.set_fitness (simulate_model (c.genotype))
+        self.population[start:end] = population
+
     def unthreaded_simulate (self):
         # Run population through simulation.
         for c in self.population:
