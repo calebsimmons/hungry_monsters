@@ -3,7 +3,10 @@ import random
 import math
 import Queue
 import threading
-from simulate import simulate_model
+import multiprocessing
+import sys
+import time
+from simulate import simulate_model, get_time 
 
 # GA parameters
 POP_SIZE    = 10
@@ -14,16 +17,27 @@ def main ():
     
     avg_fitness = list()
     g = Gene()
-    for i in range (10):
-        avg_fitness.append(g.iterate())
-    print '\n'.join (map (str, avg_fitness))
+    num_iter = 10
+    print "Expected:", (POP_SIZE * num_iter) * get_time()
+    start = time.time() 
+    for i in range (num_iter + 1):
+        # Go to beginning of line.
+        sys.stdout.write('\r')
+        n = int (math.floor (i / (num_iter / 20.0)))
+        sys.stdout.write("[%-20s] %d%% %f sec" % ('='*n, float(i)/num_iter*100, time.time() - start))
+        sys.stdout.flush()
+        if i < num_iter:
+            g.iterate ()
+    print ""
+    print '\n'.join (map (str, g.history))
 
 class Chromosome:
     def __init__ (self):
         # Parameters are: K_xy, K_xz, K_yz
         self.genotype = [random.randint (0, 15) for i in range (3)]
         self.num_param = len (self.genotype)
-
+        self.fitness = 0
+     
     def recombine (self, C):
         # Returns new set of parameters where each parameter has 50% of being
         # from a parent.
@@ -34,8 +48,10 @@ class Chromosome:
             else:
                 child.append (C.genotype[i])
         chromosome = Chromosome()
+        chromosome.fitness = 0
         chromosome.genotype = child
         return chromosome
+
     def set_fitness (self, fitness):
         self.fitness = fitness
 
@@ -44,25 +60,63 @@ class Chromosome:
         gene = random.choice (range (self.num_param))
         self.genotype[gene] *= random.lognormvariate (0, 1)
 
-class SimulationThread(threading.Thread):
-    def __init__ (self, population):
-        threading.Thread.__init__(self)
+class MP_Simulation(multiprocessing.Process):
+    def __init__ (self, population, starti, endi):
+        multiprocessing.Process.__init__(self)
+        self.daemon = True
         self.population = population
+        self.starti = starti
+        self.endi = endi
 
     def run (self):
-        for c in self.population:
-            c.set_fitness (simulate_model (c.genotype))
+        starti = self.starti
+        endi = self.endi
+        num_iter = len (self.population) / 2
+        for i in range (starti, endi):
+            c = self.population [i]
+            fitness = 0
+            try:
+                fitness = simulate_model (c.genotype)
+            except:
+                pass
+            self.population [i].fitness = fitness
+        print ""
+        print [c.fitness for c in self.population]
+
+            
+class SimulationThread(threading.Thread):
+    def __init__ (self, population, starti, endi):
+        threading.Thread.__init__(self)
+        self.population = population
+        self.starti = starti
+        self.endi = endi
+
+    def run (self):
+        starti = self.starti
+        endi = self.endi
+        num_iter = len (self.population) / 2
+        for i in range (starti, endi):
+            c = self.population [i]
+            fitness = 0
+            try:
+                fitness = simulate_model (c.genotype)
+            except:
+                pass
+            self.population [i].fitness = fitness
 
 
 class Gene:
     def __init__ (self):
         self.population = [Chromosome() for i in range (POP_SIZE)]
+        self.history = list()
     
     def iterate (self):
         # Set fitness for all chromosomes.
         self.simulate()
         # Select new chromosomes with SUS and FPS.
         self.selection()
+        total = sum ([c.fitness  for c in self.population])
+        self.history.append (total)
         # Recombine chromosomes.
         self.crossover()
 
@@ -88,15 +142,15 @@ class Gene:
     def simulate (self):
         # Split simulation into two threads 
         half = int (POP_SIZE / 2)
-        t1 = SimulationThread (self.population[:half])
-        t2 = SimulationThread (self.population[half:])
+        t1 = SimulationThread (self.population, 0, half)
+        t2 = SimulationThread (self.population, half, POP_SIZE)
         t1.start()
         t2.start()
         t1.join()
         t2.join()
-        
         # Merge the results.
-        self.population = t1.population + t2.population  
+        print [c.fitness for c in t1.population]
+        self.population = list(t1.population)
 
     def threaded_simulate (self, thread):
         
@@ -105,14 +159,12 @@ class Gene:
         end = start + half
         population = self.population [start:end]
         for c in population:
-            print c.genotype
-            c.set_fitness (simulate_model (c.genotype))
+            c.fitness = simulate_model (c.genotype)
         self.population[start:end] = population
 
     def unthreaded_simulate (self):
         # Run population through simulation.
         for c in self.population:
-            print c.genotype 
             c.set_fitness (simulate_model (c.genotype))
 
         #for c in sorted(self.population, key= lambda c: c.fitness):
