@@ -9,7 +9,7 @@ import time
 from simulate import simulate_model, get_time 
 
 # GA parameters
-POP_SIZE    = 10
+POP_SIZE    = 100
 COPY_RATE   = 0.10
 MUTATE_RATE = 0.01
 
@@ -61,27 +61,23 @@ class Chromosome:
         self.genotype[gene] *= random.lognormvariate (0, 1)
 
 class MP_Simulation(multiprocessing.Process):
-    def __init__ (self, population, starti, endi):
+    def __init__ (self, task_queue, result_queue):
         multiprocessing.Process.__init__(self)
-        self.daemon = True
-        self.population = population
-        self.starti = starti
-        self.endi = endi
+        self.task_queue = task_queue
+        self.result_queue = result_queue
 
     def run (self):
-        starti = self.starti
-        endi = self.endi
-        num_iter = len (self.population) / 2
-        for i in range (starti, endi):
-            c = self.population [i]
+        while True:
+            c = self.task_queue.get()
             fitness = 0
+            if c is None:
+                break
             try:
                 fitness = simulate_model (c.genotype)
             except:
                 pass
-            self.population [i].fitness = fitness
-        print ""
-        print [c.fitness for c in self.population]
+            c.fitness = fitness
+            self.result_queue.put (c)
 
             
 class SimulationThread(threading.Thread):
@@ -140,6 +136,27 @@ class Gene:
         self.population = population
 
     def simulate (self):
+        tasks = multiprocessing.Queue()
+        results = multiprocessing.Queue()
+        num_consumers = multiprocessing.cpu_count() * 2
+        consumers = [ MP_Simulation (tasks, results)
+                      for i in xrange (num_consumers) ]
+        for w in consumers:
+            w.start()
+
+        num_chrom = POP_SIZE
+        for i in xrange (num_chrom):
+            tasks.put (self.population [i])
+        for i in xrange (num_consumers):
+            tasks.put (None)
+        population = list()
+        while num_chrom:
+            C = results.get()
+            population.append (C)
+            num_chrom -= 1
+        self.population = list(population)
+            
+    def simulate_thread (self):
         # Split simulation into two threads 
         half = int (POP_SIZE / 2)
         t1 = SimulationThread (self.population, 0, half)
