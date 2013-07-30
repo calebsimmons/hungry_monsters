@@ -1,3 +1,34 @@
+Installing libsbml:
+---
+Copy source from [libSBML SourceForge](http://sourceforge.net/projects/sbml/files/libsbml/5.8.0/stable/):
+     
+    wget http://downloads.sourceforge.net/project/sbml/libsbml/5.8.0/stable/libSBML-5.8.0-core-plus-packages-src.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fsbml%2Ffiles%2Flibsbml%2F5.8.0%2Fstable%2F&ts=1375213737&use_mirror=superb-dca3
+
+Extract files from archive:
+
+    tar xzf libSBML-5.8.0-core-plus-packages-src.tar.gz 
+
+Install package with Python bindings:
+    
+    ./configure --with-python
+    make
+    sudo make install
+    sudo ldconfig
+    export PYTHONPATH=/usr/local/lib64/python2.7/site-packages/libsbml
+
+Installing libSBMLsim:
+---
+Grab source from [Funahashi Lab](http://fun.bio.keio.ac.jp/software/libsbmlsim/):
+
+    wget http://fun.bio.keio.ac.jp/software/libsbmlsim/downloads/libsbmlsim-1.1.0.tar.gz
+    tar xvzf libsbmlsim-1.1.0.tar.gz 
+    mkdir libsbmlsim-1.1.0/build
+    cd libsbmlsim-1.1.0/build
+    cmake ..
+    ccmake .
+    make
+    sudo make install
+    
 Creating a model:
 ---
 
