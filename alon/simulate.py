@@ -1,6 +1,7 @@
 # simulate.py - Simulates and visualizes SBML-sh file.
 import sys
 import os
+import time
 import subprocess
 import tempfile
 import mod2sbml 
@@ -51,7 +52,7 @@ def simulate (sbml_sh):
         steps=1,  
         file_name=temp.name
         ).strip()
-    subprocess.call (command.split (' '))
+    subprocess.call (command.split (' '), stdout=open(os.devnull, 'w'))
 
     # out.csv
     #print open ('out.csv').read()
@@ -62,6 +63,11 @@ def simulate (sbml_sh):
     # Return fitness.
     return fitness
 
+def get_time ():
+    start = time.time()
+    simulate_model ([10, 10, 10])
+    end = time.time()
+    return end - start
 
 def main():
 
