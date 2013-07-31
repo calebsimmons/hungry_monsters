@@ -9,7 +9,7 @@ import time
 from simulate import simulate_model, get_time 
 
 # GA parameters
-POP_SIZE    = 100
+POP_SIZE    = 10
 COPY_RATE   = 0.10
 MUTATE_RATE = 0.01
 
@@ -105,16 +105,36 @@ class Gene:
     def __init__ (self):
         self.population = [Chromosome() for i in range (POP_SIZE)]
         self.history = list()
+        self.generation = 0
+        self.log_name = "sim_first.dat"
+        log = open (self.log_name, 'w')
+        log.write ('|'.join("""
+            <generation> <pop#> <genotype <fitness>
+            """.strip().split())
+            )
     
     def iterate (self):
         # Set fitness for all chromosomes.
         self.simulate()
+        # Write to log.
+        self.log ()
         # Select new chromosomes with SUS and FPS.
         self.selection()
         total = sum ([c.fitness  for c in self.population])
         self.history.append (total)
         # Recombine chromosomes.
         self.crossover()
+
+    def log (self):
+        # Output is:
+        # generation, pop #, [genotype], fitness
+        self.generation += 1
+        self.population = sorted (self.population, key=lambda c: c.fitness, reverse=True)
+        out = ["|".join (map (str, [self.generation, x, [float("{:.3}".format (float(g))) for g in self.population[x].genotype], self.population[x].fitness])) for x in range (len (self.population))]
+        f = open (self.log_name, 'a')
+        f.write ('\n' + "\n".join (out))
+        f.close()
+
 
     def crossover (self):
         population = list()
@@ -154,7 +174,9 @@ class Gene:
             C = results.get()
             population.append (C)
             num_chrom -= 1
+        print "->", [c.fitness for c in population]
         self.population = list(population)
+        print "\n-->", [c.fitness for c in self.population]
             
     def simulate_thread (self):
         # Split simulation into two threads 
