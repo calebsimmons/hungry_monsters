@@ -1,5 +1,6 @@
 # simulate.py - Simulates and visualizes SBML-sh file.
 import sys
+import random
 import os
 import time
 import subprocess
@@ -72,7 +73,23 @@ def get_time ():
 def main():
 
     # Call simulation.
-    print "Fitness:", simulate_model ([10, 10, 10])
+    fails = list()
+    for i in range (10):
+        for j in range (10):
+            for k in range (10):
+                fitness = 0
+                try:
+                    fitness = simulate_model ([i, j, k])
+                except:
+                    continue
+                if fitness == 0:
+                    fails.append ([i, j, k])
+                    print [i, j, k]
+    print len (fails)
+                   
+                    
+
+    print "Fitness:", simulate_model ([5, 5, 5])
 
 if __name__ == "__main__":
     main()
