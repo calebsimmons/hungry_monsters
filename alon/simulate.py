@@ -8,6 +8,28 @@ import tempfile
 import mod2sbml 
 from string import Template
 
+def get_data (f="out.csv"):
+    # Returns dictionary with key-series pairing.
+    # E.g. data['time'] = [0.0, 1200.0, 2400.0, ...]
+    data = dict()
+    # Fill with data.
+    csv = open (f, 'r').read().strip()
+    lines = csv.split ('\n')
+    titles = lines[0].split (',')
+    # Create data's keys.
+    for title in titles:
+        data[title] = list()
+    # Pluck data from each column.
+    for line in lines[1:]:
+        for i in range (line.count (',')):
+            col = line.split (',')
+            data [titles[i]].append (col[i])
+    # Convert to float for matplotlib.
+    for k, v in data.iteritems():
+        data[k] = map (float, v)
+    return data
+
+
 def simulate_model (param=None):
     if param == None: 
         # Open SBML-shorthand file.
@@ -49,8 +71,8 @@ def simulate (sbml_sh):
     command = """
         simulateSBML -t {time} -s {steps} -l -m 3 {file_name}
     """.format (
-        time=13999, 
-        steps=1,  
+        time=7200, 
+        steps=30,  
         file_name=temp.name
         ).strip()
     subprocess.call (command.split (' '), stdout=open(os.devnull, 'w'))
@@ -66,30 +88,15 @@ def simulate (sbml_sh):
 
 def get_time ():
     start = time.time()
-    simulate_model ([10, 10, 10])
+    simulate_model ([0, 0, 0])
     end = time.time()
     return end - start
 
 def main():
 
     # Call simulation.
-    fails = list()
-    for i in range (10):
-        for j in range (10):
-            for k in range (10):
-                fitness = 0
-                try:
-                    fitness = simulate_model ([i, j, k])
-                except:
-                    continue
-                if fitness == 0:
-                    fails.append ([i, j, k])
-                    print [i, j, k]
-    print len (fails)
-                   
+    print simulate_model ([1.75, 1.62, 2.42])
                     
-
-    print "Fitness:", simulate_model ([5, 5, 5])
 
 if __name__ == "__main__":
     main()
