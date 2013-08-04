@@ -49,7 +49,7 @@ def simulate (sbml_sh):
     command = """
         simulateSBML -t {time} -s {steps} -l -m 3 {file_name}
     """.format (
-        time=13999, 
+        time=14000, 
         steps=1,  
         file_name=temp.name
         ).strip()
@@ -71,24 +71,6 @@ def get_time ():
     return end - start
 
 def main():
-
-    # Call simulation.
-    fails = list()
-    for i in range (10):
-        for j in range (10):
-            for k in range (10):
-                fitness = 0
-                try:
-                    fitness = simulate_model ([i, j, k])
-                except:
-                    continue
-                if fitness == 0:
-                    fails.append ([i, j, k])
-                    print [i, j, k]
-    print len (fails)
-                   
-                    
-
     print "Fitness:", simulate_model ([5, 5, 5])
 
 if __name__ == "__main__":
