@@ -93,7 +93,6 @@ def get_time ():
     return end - start
 
 def main():
-
     # Call simulation.
     print simulate_model ([5, 5, 5])
                     
