@@ -6,15 +6,15 @@
 # Inital concentrations of reactants:
 @species
 # Signals  
-  default:S_x = 1
-  default:S_y = 1
+  default:S_x = 1 
 
 # Proteins 
-  default:X = 0 
+  default:X = 17 
   default:X_a = 0
   default:Y = 0 
   default:Y_a = 0
   default:Z = 0 
+  default:P = 0
 
 # ATP 
   default:ATP_gained = 0
@@ -96,7 +96,7 @@
 # Signal S_y must accumulate for Y to be activated. This results in a delay for
 # production of Z.
 @r=activates_Y
-  Y + S_y -> Y_a + S_y
+  Y + S_x -> Y_a + S_x
   Y * gt(S_x, 0) * gt(Y, 0)
 
 @r=unbinding_Y
@@ -110,8 +110,8 @@
   Beta_Enz * gt(X_a, K_xz) * gt(Y_a, K_yz)
 
 @r=production_ATP
-  Z + S_x -> Z + 3 ATP_gained + S_x
-  gt(Z, 0) * gt(S_x, 0) * Z
+  Z + S_x -> Z + 1 ATP_gained + S_x
+  gt(Z, 0) * gt(S_x, 0) * Z * 0.1
 
 # Degradation rates for all proteins.
 @r=degradation_X
@@ -136,8 +136,8 @@
 
 # Pulse distribution.
 @events
-  on1  =  t > 720 : S_x = 1
-  off1 =  t > 900 : S_x = -1 
-  on2  =  t > 2162 : S_x = 1
-  off2 =  t > 2342 : S_x = -1
-  on3  =  t > 4324 : S_x = 1
+# [1080.0, 1260.0, 3600.0, 5400.0]
+  catch =  ATP_gained > ATP_spent: P = time
+  off1 =  t > 290 : S_x = -1 
+  on2  =  t > 6290 : S_x = 1
+  off2 =  t > 6740 : S_x = -1
