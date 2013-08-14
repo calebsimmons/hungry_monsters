@@ -95,7 +95,7 @@ def get_time ():
 def main():
 
     # Call simulation.
-    print simulate_model ([1.75, 1.62, 2.42])
+    print simulate_model ([5, 5, 5])
                     
 
 if __name__ == "__main__":
