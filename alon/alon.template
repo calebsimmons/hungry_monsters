@@ -76,7 +76,7 @@
 @reactions
 # First, a signal S_x activates protein X. X_a is the actived X protein.
 @r=production_X
-  -> X + 4 ATP_spent
+  -> X + 1435 ATP_spent
   Beta_TF + Beta_B
 
 @r=activates_X
@@ -90,7 +90,7 @@
 # parallel, X_a binds to Z's promoter region. Y production can begin when X_a
 # builds up past Y's activation threshold K_xy.
 @r=production_Y 
-  X_a -> Y + X_a + 4 ATP_spent
+  X_a -> Y + X_a + 1435 ATP_spent
   Beta_TF * gt(X_a, K_xy) + Beta_B
 
 # Signal S_y must accumulate for Y to be activated. This results in a delay for
@@ -106,12 +106,12 @@
 # Production of Z begins when activated X and Y accumulate past a certain
 # concentration. 
 @r=production_Z 
-  X_a + Y_a -> Z + X_a + Y_a + 13 ATP_spent
+  X_a + Y_a -> Z + X_a + Y_a + 5120 ATP_spent
   Beta_Enz * gt(X_a, K_xz) * gt(Y_a, K_yz)
 
 @r=production_ATP
-  Z + S_x -> Z + 1 ATP_gained + S_x
-  gt(Z, 0) * gt(S_x, 0) * Z * 0.1
+  Z + S_x -> Z + 26 ATP_gained + S_x
+  gt(Z, 0) * gt(S_x, 0) * Z 
 
 # Degradation rates for all proteins.
 @r=degradation_X
@@ -138,6 +138,6 @@
 @events
 # [1080.0, 1260.0, 3600.0, 5400.0]
   catch =  ATP_gained > ATP_spent: P = time
-  off1 =  t > 290 : S_x = -1 
-  on2  =  t > 6290 : S_x = 1
-  off2 =  t > 6740 : S_x = -1
+#  off1 =  t > 290 : S_x = -1 
+#  on2  =  t > 6290 : S_x = 1
+#  off2 =  t > 6740 : S_x = -1
