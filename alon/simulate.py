@@ -2,13 +2,14 @@
 import sys
 import random
 import os
+import re
 import time
 import subprocess
 import tempfile
 import mod2sbml 
 from string import Template
 
-def get_data (f="out.csv"):
+def get_data (f="out.csv", t="alon.template"):
     # Returns dictionary with key-series pairing.
     # E.g. data['time'] = [0.0, 1200.0, 2400.0, ...]
     data = dict()
@@ -27,6 +28,21 @@ def get_data (f="out.csv"):
     # Convert to float for matplotlib.
     for k, v in data.iteritems():
         data[k] = map (float, v)
+    # Extract signal plot from template.
+    template = open (t, 'r').read ().strip ()
+    times = [0] + map (int, re.findall ("t > (\d*)", template))
+    signal = map (int, re.findall ("S_x = (-?\d*)", template))
+    signal = [0 if x == -1 else x for x in signal]
+    z = zip (times, signal)
+    zf = [tuple ([x[0], 0]) if x[1] == 1 else tuple ([x[0], 1]) for x in z]
+    result = [None] * (len (z) * 2)
+    result[::2] = zf
+    result[1::2] = z
+    times = [i[0] for i in result]
+    signals = [i[1] for i in result]
+    data ['sigt'] = times
+    data ['sign'] = signals
+    data ['signal'] = result
     return data
 
 
@@ -71,19 +87,17 @@ def simulate (sbml_sh):
     command = """
         simulateSBML -t {time} -s {steps} -l -m 3 {file_name}
     """.format (
-        time=7200, 
-        steps=30,  
+        time=15400, 
+        steps=1,  
         file_name=temp.name
         ).strip()
     subprocess.call (command.split (' '), stdout=open(os.devnull, 'w'))
 
-    # out.csv
     #print open ('out.csv').read()
     ATP = map (float, open ('out.csv').readlines()[-1].split (","))
     gained, spent = ATP [8], ATP [9]
     fitness = gained - spent
     
-    # Return fitness.
     return fitness
 
 def get_time ():
@@ -94,7 +108,14 @@ def get_time ():
 
 def main():
     # Call simulation.
-    print simulate_model ([5, 5, 5])
+    r = [0, 2, 4, 6, 8, 10]
+    for i in r:
+        for j in r:
+            for k in r:
+                print simulate_model ([i, j, k]), "[{} {} {}]".format(i, j, k)
+    return
+    for i in range (17):
+        print simulate_model ([i, i, i]), "(%.2f)" % i
                     
 
 if __name__ == "__main__":
