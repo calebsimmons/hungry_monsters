@@ -9,7 +9,7 @@ import time
 from simulate import simulate_model, get_time 
 
 # GA parameters
-POP_SIZE    = 10
+POP_SIZE    = 100
 COPY_RATE   = 0.10
 MUTATE_RATE = 0.01
 
@@ -17,7 +17,7 @@ def main ():
     
     avg_fitness = list()
     g = Gene()
-    num_iter = 10
+    num_iter = 500
     print "Expected:", (POP_SIZE * num_iter) * get_time()
     start = time.time() 
     for i in range (num_iter + 1):
@@ -76,7 +76,10 @@ class MP_Simulation(multiprocessing.Process):
                 fitness = simulate_model (c.genotype)
             except:
                 pass
-            c.fitness = fitness
+            if fitness >= 0:
+                c.fitness = fitness
+            else:
+                fitness = 0
             self.result_queue.put (c)
 
             
@@ -98,8 +101,10 @@ class SimulationThread(threading.Thread):
                 fitness = simulate_model (c.genotype)
             except:
                 pass
-            self.population [i].fitness = fitness
-
+            if fitness >= 0:
+                self.population [i].fitness = fitness
+            else:
+                self.population [i].fitness = 0
 
 class Gene:
     def __init__ (self):

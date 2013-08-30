@@ -6,7 +6,7 @@
 # Inital concentrations of reactants:
 @species
 # Signals  
-  default:S_x = 1 
+  default:S_x = -1
 
 # Proteins 
   default:X = 17 
@@ -70,13 +70,17 @@
   K_xz = $K_xz
   K_yz = $K_yz
 
+# Pulse times
+  t_1 = $t_1
+  t_2 = $t_2
+
 # Basal production rate.
   Beta_B = 0.00033
 
 @reactions
 # First, a signal S_x activates protein X. X_a is the actived X protein.
 @r=production_X
-  -> X + 1435 ATP_spent
+  -> X 
   Beta_TF + Beta_B
 
 @r=activates_X
@@ -90,7 +94,7 @@
 # parallel, X_a binds to Z's promoter region. Y production can begin when X_a
 # builds up past Y's activation threshold K_xy.
 @r=production_Y 
-  X_a -> Y + X_a + 1435 ATP_spent
+  X_a -> Y + X_a 
   Beta_TF * gt(X_a, K_xy) + Beta_B
 
 # Signal S_y must accumulate for Y to be activated. This results in a delay for
@@ -136,8 +140,7 @@
 
 # Pulse distribution.
 @events
-# [1080.0, 1260.0, 3600.0, 5400.0]
-  catch =  ATP_gained > ATP_spent: P = time
-#  off1 =  t > 290 : S_x = -1 
-#  on2  =  t > 6290 : S_x = 1
-#  off2 =  t > 6740 : S_x = -1
+  on1 = t > 2567 : S_x = 1 
+  off1 =  t > t_1 : S_x = -1 
+  on2  =  t > 10267 : S_x = 1
+  off2 =  t > t_2 : S_x = -1

@@ -59,11 +59,15 @@ def simulate_model (param=None):
         # Open template and substitute values
         sbml_template_file = "alon.template"
         try:
+	    t_1 = int(2567 + get_pulse_length(.80))
+	    t_2 = int(10267 + get_pulse_length(.80))
             sbml_template = open (sbml_template_file, 'r').read()
             sbml_sh = Template (sbml_template).substitute ({
                 'K_xy': param[0],
                 'K_xz': param[1],
-                'K_yz': param[2]
+                'K_yz': param[2],
+		't_1' : t_1,
+		't_2' : t_2
             })
         except:
             print "Error! Cannot open '{}'.".format (sbml_sh_file) 
@@ -106,6 +110,15 @@ def get_time ():
     end = time.time()
     return end - start
 
+def get_pulse_length(p):
+
+    if random.random() <= p:
+	return random.gauss(100,10)
+    else:
+	return random.gauss(1000,100)
+
+
+
 def main():
     # Call simulation.
     r = [0, 2, 4, 6, 8, 10]
@@ -120,3 +133,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
