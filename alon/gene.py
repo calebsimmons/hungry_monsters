@@ -140,7 +140,7 @@ class Gene:
         # generation, pop #, [genotype], fitness, t_1, t_2
         self.generation += 1
         self.population = sorted (self.population, key=lambda c: c.fitness, reverse=True)
-        out = ["|".join (map (str, [self.generation, x, [float("{:.3}".format (float(g))) for g in self.population[x].genotype], self.population[x].fitness])) for x in range (len (self.population)),int(self.t_1-2567),int(self.t_2-10267)]
+        out = ["|".join (map (str, [self.generation, x, [float("{:.3}".format (float(g))) for g in self.population[x].genotype], self.population[x].fitness,int(self.t_1-2567),int(self.t_2-10267)])) for x in range (len (self.population))]
         f = open (self.log_name, 'a')
         f.write ('\n' + "\n".join (out))
         f.close()
