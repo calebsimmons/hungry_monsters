@@ -46,7 +46,7 @@ def get_data (f="out.csv", t="alon.template"):
     return data
 
 
-def simulate_model (param=None):
+def simulate_model (param,t_1,t_2):
     if param == None: 
         # Open SBML-shorthand file.
         sbml_sh_file = "alon.py"
@@ -59,8 +59,8 @@ def simulate_model (param=None):
         # Open template and substitute values
         sbml_template_file = "alon.template"
         try:
-	    t_1 = int(2567 + get_pulse_length(.80))
-	    t_2 = int(10267 + get_pulse_length(.80))
+	    #t_1 = int(2567 + get_pulse_length(.80))
+	    #t_2 = int(10267 + get_pulse_length(.80))
             sbml_template = open (sbml_template_file, 'r').read()
             sbml_sh = Template (sbml_template).substitute ({
                 'K_xy': param[0],
@@ -106,12 +106,11 @@ def simulate (sbml_sh):
 
 def get_time ():
     start = time.time()
-    simulate_model ([0, 0, 0])
+    simulate_model ([0, 0, 0],2568,10268)
     end = time.time()
     return end - start
 
 def get_pulse_length(p):
-
     if random.random() <= p:
 	return random.gauss(100,10)
     else:

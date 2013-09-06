@@ -35,7 +35,7 @@ class Chromosome:
     def __init__ (self):
         # Parameters are: K_xy, K_xz, K_yz
         self.genotype = [random.randint (0, 15) for i in range (3)]
-        self.num_param = len (self.genotype)
+        self.num_param = len (self.genotype) 
         self.fitness = 0
      
     def recombine (self, C):
@@ -73,14 +73,14 @@ class MP_Simulation(multiprocessing.Process):
             if c is None:
                 break
             try:
-                fitness = simulate_model (c.genotype)
+                fitness = simulate_model (c[0].genotype,c[1],c[2])
             except:
                 pass
-            if fitness >= 0:
-                c.fitness = fitness
+            if fitness >= 1:
+                c[0].fitness = fitness
             else:
-                fitness = 0
-            self.result_queue.put (c)
+                c[0].fitness = 1
+            self.result_queue.put (c[0])
 
             
 class SimulationThread(threading.Thread):
@@ -112,13 +112,18 @@ class Gene:
         self.history = list()
         self.generation = 0
         self.log_name = "sim_first.dat"
+        self.t_1 = int(2567+self.get_pulse_length())
+        self.t_1 = int(10267+self.get_pulse_length())
         log = open (self.log_name, 'w')
         log.write ('|'.join("""
-            <generation> <pop#> <genotype <fitness>
+            <generation> <pop#> <genotype> <fitness> <t_1> <t_2>
             """.strip().split())
             )
     
     def iterate (self):
+        # get pulse distribution
+        self.t_1 = int(2567+self.get_pulse_length())
+        self.t_2 = int(10267+self.get_pulse_length())
         # Set fitness for all chromosomes.
         self.simulate()
         # Write to log.
@@ -132,10 +137,10 @@ class Gene:
 
     def log (self):
         # Output is:
-        # generation, pop #, [genotype], fitness
+        # generation, pop #, [genotype], fitness, t_1, t_2
         self.generation += 1
         self.population = sorted (self.population, key=lambda c: c.fitness, reverse=True)
-        out = ["|".join (map (str, [self.generation, x, [float("{:.3}".format (float(g))) for g in self.population[x].genotype], self.population[x].fitness])) for x in range (len (self.population))]
+        out = ["|".join (map (str, [self.generation, x, [float("{:.3}".format (float(g))) for g in self.population[x].genotype], self.population[x].fitness])) for x in range (len (self.population)),int(self.t_1-2567),int(self.t_2-10267)]
         f = open (self.log_name, 'a')
         f.write ('\n' + "\n".join (out))
         f.close()
@@ -171,7 +176,7 @@ class Gene:
 
         num_chrom = POP_SIZE
         for i in xrange (num_chrom):
-            tasks.put (self.population [i])
+            tasks.put ((self.population [i],self.t_1,self.t_2))
         for i in xrange (num_consumers):
             tasks.put (None)
         population = list()
@@ -243,6 +248,13 @@ class Gene:
         #for c in sorted(new_pop, key= lambda c: c.fitness):
         #    print "{: <12} {}".format (c.genotype, c.fitness)
         self.population = new_pop
+
+    def get_pulse_length(self):
+        if random.random()<=.80:
+            return random.gauss(500,10)
+        else:
+            return random.gauss(5000,100)
+        
 
 
 
