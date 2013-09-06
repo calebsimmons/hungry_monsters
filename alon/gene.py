@@ -9,12 +9,12 @@ import time
 from simulate import simulate_model, get_time 
 
 # GA parameters
-POP_SIZE    = 100
+POP_SIZE    = 500
 COPY_RATE   = 0.10
 MUTATE_RATE = 0.01
 
 def main ():
-    
+    #print "inside gene.main"
     avg_fitness = list()
     g = Gene()
     num_iter = 500
@@ -39,6 +39,7 @@ class Chromosome:
         self.fitness = 0
      
     def recombine (self, C):
+        #print "inside recombine"
         # Returns new set of parameters where each parameter has 50% of being
         # from a parent.
         child = list()
@@ -53,9 +54,14 @@ class Chromosome:
         return chromosome
 
     def set_fitness (self, fitness):
-        self.fitness = fitness
+        #print "inside set_fitness"
+        if fitness >= 1:
+            self.fitness = fitness
+        else:
+            self.fitness = 1
 
     def mutate (self):
+        #print "inside mutate"
         # Mutates a random gene by log-normal scaling.
         gene = random.choice (range (self.num_param))
         self.genotype[gene] *= random.lognormvariate (0, 1)
@@ -67,6 +73,7 @@ class MP_Simulation(multiprocessing.Process):
         self.result_queue = result_queue
 
     def run (self):
+        #print "inside MP run"
         while True:
             c = self.task_queue.get()
             fitness = 0
@@ -86,9 +93,11 @@ class MP_Simulation(multiprocessing.Process):
 class SimulationThread(threading.Thread):
     def __init__ (self, population, starti, endi):
         threading.Thread.__init__(self)
-        self.population = population
+        self.population = population[0]
         self.starti = starti
         self.endi = endi
+        self.t_1 = population[1]
+        self.t_2 = population[2]
 
     def run (self):
         starti = self.starti
@@ -98,13 +107,13 @@ class SimulationThread(threading.Thread):
             c = self.population [i]
             fitness = 0
             try:
-                fitness = simulate_model (c.genotype)
+                fitness = simulate_model (c.genotype,self.t_1,self.t_2)
             except:
                 pass
-            if fitness >= 0:
+            if fitness >= 1:
                 self.population [i].fitness = fitness
             else:
-                self.population [i].fitness = 0
+                self.population [i].fitness = 1
 
 class Gene:
     def __init__ (self):
@@ -121,6 +130,7 @@ class Gene:
             )
     
     def iterate (self):
+        #print "inside iterate"
         # get pulse distribution
         self.t_1 = int(2567+self.get_pulse_length())
         self.t_2 = int(10267+self.get_pulse_length())
@@ -136,6 +146,7 @@ class Gene:
         self.crossover()
 
     def log (self):
+        #print "inside log"
         # Output is:
         # generation, pop #, [genotype], fitness, t_1, t_2
         self.generation += 1
@@ -147,6 +158,7 @@ class Gene:
 
 
     def crossover (self):
+        #print "inside crossover"
         population = list()
         while len (population) < POP_SIZE:
             # Pick two parents.
@@ -166,6 +178,7 @@ class Gene:
         self.population = population
 
     def simulate (self):
+        #print "inside simulate"
         tasks = multiprocessing.Queue()
         results = multiprocessing.Queue()
         num_consumers = multiprocessing.cpu_count() * 2
@@ -191,8 +204,8 @@ class Gene:
     def simulate_thread (self):
         # Split simulation into two threads 
         half = int (POP_SIZE / 2)
-        t1 = SimulationThread (self.population, 0, half)
-        t2 = SimulationThread (self.population, half, POP_SIZE)
+        t1 = SimulationThread ((self.population,self.t_1,self.t_2), 0, half)
+        t2 = SimulationThread ((self.population,self.t_1,self.t_2), half, POP_SIZE)
         t1.start()
         t2.start()
         t1.join()
@@ -212,16 +225,20 @@ class Gene:
         self.population[start:end] = population
 
     def unthreaded_simulate (self):
+        #print "inside unthreaded_simulate"
         # Run population through simulation.
         for c in self.population:
-            c.set_fitness (simulate_model (c.genotype))
+            c.set_fitness (simulate_model (c.genotype,self.t_1,self.t_2))
+            print "simulate %s, %s" % (str(self.t_1),str(self.t_2))
 
-        #for c in sorted(self.population, key= lambda c: c.fitness):
-        #    print "{: <12} {}".format (c.genotype, c.fitness)
+        for c in sorted(self.population, key= lambda c: c.fitness):
+            print "{: <12} {}".format (c.genotype, c.fitness)
+            
         print ""
 
         
     def selection (self):
+        #print "inside selection"
         # Pick chromosomes with probability proportional to fitness.
         total_fitness = sum ([c.fitness for c in self.population])
         total_fitness = float (total_fitness)
@@ -250,10 +267,15 @@ class Gene:
         self.population = new_pop
 
     def get_pulse_length(self):
+        #print "inside get pulse length"
         if random.random()<=.80:
-            return random.gauss(500,10)
+            t = random.gauss(500,10)
         else:
-            return random.gauss(5000,100)
+            t = random.gauss(1000,10)
+        if t > 5000:
+            return t-5000
+        else: 
+            return t
         
 
 

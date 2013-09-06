@@ -47,6 +47,7 @@ def get_data (f="out.csv", t="alon.template"):
 
 
 def simulate_model (param,t_1,t_2):
+    #print "inside simulate_model"
     if param == None: 
         # Open SBML-shorthand file.
         sbml_sh_file = "alon.py"
@@ -76,7 +77,7 @@ def simulate_model (param,t_1,t_2):
     return simulate (sbml_sh)
 
 def simulate (sbml_sh):
-
+    #print "inside simulate.py"
     # Convert to SBML and save in temporary file.
     try:
         SBML = mod2sbml.parse (sbml_sh)
@@ -87,7 +88,7 @@ def simulate (sbml_sh):
         print "Error! Couldn't parse SBML-sh."
         sys.exit (1)
 
-    # Run simulation.
+    #print " Run simulation."
     command = """
         simulateSBML -t {time} -s {steps} -l -m 3 {file_name}
     """.format (
@@ -105,6 +106,7 @@ def simulate (sbml_sh):
     return fitness
 
 def get_time ():
+    #print "inside get time"
     start = time.time()
     simulate_model ([0, 0, 0],2568,10268)
     end = time.time()
