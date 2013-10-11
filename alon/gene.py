@@ -9,7 +9,7 @@ import time
 from simulate import simulate_model, get_time 
 
 # GA parameters
-POP_SIZE    = 500
+POP_SIZE    = 100
 COPY_RATE   = 0.10
 MUTATE_RATE = 0.01
 
@@ -121,8 +121,8 @@ class Gene:
         self.history = list()
         self.generation = 0
         self.log_name = "sim_first.dat"
-        self.t_1 = int(2567+self.get_pulse_length())
-        self.t_1 = int(10267+self.get_pulse_length())
+        self.t_1 = int(4800+500)
+        self.t_1 = int(19200+4000)
         log = open (self.log_name, 'w')
         log.write ('|'.join("""
             <generation> <pop#> <genotype> <fitness> <t_1> <t_2>
@@ -132,8 +132,8 @@ class Gene:
     def iterate (self):
         #print "inside iterate"
         # get pulse distribution
-        self.t_1 = int(2567+self.get_pulse_length())
-        self.t_2 = int(10267+self.get_pulse_length())
+        self.t_1 = int(4800+500)
+        self.t_2 = int(19200+4000)
         # Set fitness for all chromosomes.
         self.simulate()
         # Write to log.

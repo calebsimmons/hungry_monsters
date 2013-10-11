@@ -90,17 +90,17 @@ def simulate (sbml_sh):
 
     #print " Run simulation."
     command = """
-        simulateSBML -t {time} -s {steps} -l -m 3 {file_name}
+        simulateSBML -t {time} -s {steps} -l -m 1 {file_name}
     """.format (
-        time=15400, 
-        steps=1,  
+        time=28800, 
+        steps=3,  
         file_name=temp.name
         ).strip()
     subprocess.call (command.split (' '), stdout=open(os.devnull, 'w'))
 
     #print open ('out.csv').read()
     ATP = map (float, open ('out.csv').readlines()[-1].split (","))
-    gained, spent = ATP [8], ATP [9]
+    gained, spent = ATP [9], ATP [10]
     fitness = gained - spent
     
     return fitness
@@ -108,13 +108,13 @@ def simulate (sbml_sh):
 def get_time ():
     #print "inside get time"
     start = time.time()
-    simulate_model ([0, 0, 0],2568,10268)
+    simulate_model ([0, 0, 0],4801,19201)
     end = time.time()
     return end - start
 
 def get_pulse_length(p):
     if random.random() <= p:
-	return random.gauss(100,10)
+	return random.gauss(500,10)
     else:
 	return random.gauss(1000,100)
 
@@ -122,14 +122,22 @@ def get_pulse_length(p):
 
 def main():
     # Call simulation.
-    r = [0, 2, 4, 6, 8, 10]
-    for i in r:
-        for j in r:
-            for k in r:
-                print simulate_model ([i, j, k]), "[{} {} {}]".format(i, j, k)
-    return
-    for i in range (17):
-        print simulate_model ([i, i, i]), "(%.2f)" % i
+    data = []
+    points = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1.0]
+    
+    for i in points:
+        for j in points:
+            for k in points:
+
+
+                fitness = simulate_model([i,j,k],4800+500,19200+4000)
+                data.append(([i,j,k],fitness))
+                print fitness
+
+    f = open('fitness_landscape.txt','w')
+    for d in data:
+        f.write(str(d)+'\n')
+    
                     
 
 if __name__ == "__main__":

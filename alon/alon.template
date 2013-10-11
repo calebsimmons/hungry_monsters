@@ -7,6 +7,7 @@
 @species
 # Signals  
   default:S_x = -1
+  default:S_y = 1
 
 # Proteins 
   default:X = 17 
@@ -62,7 +63,7 @@
 # 60 min
 #
 # = 1.9e-4 TF / s
-  Alpha_TF = 0.00019
+  Alpha_TF = 0.00025
 
 # Activation thresholds determine when parent can activate child.
 # These parameters will evolve.
@@ -75,7 +76,7 @@
   t_2 = $t_2
 
 # Basal production rate.
-  Beta_B = 0.00033
+  Beta_B = 0.00033*.5
 
 @reactions
 # First, a signal S_x activates protein X. X_a is the actived X protein.
@@ -95,23 +96,23 @@
 # builds up past Y's activation threshold K_xy.
 @r=production_Y 
   X_a -> Y + X_a 
-  Beta_TF * gt(X_a, K_xy) + Beta_B
+  Beta_TF * X_a/(K_xy+X_a) + Beta_B
 
 # Signal S_y must accumulate for Y to be activated. This results in a delay for
 # production of Z.
 @r=activates_Y
-  Y + S_x -> Y_a + S_x
-  Y * gt(S_x, 0) * gt(Y, 0)
+  Y + S_y -> Y_a + S_y
+  Y * gt(S_y, 0) * gt(Y, 0)
 
 @r=unbinding_Y
   Y_a -> Y
-  Y_a * lt(S_x, 0) * gt(Y_a, 0)
+  Y_a * lt(S_y, 0) * gt(Y_a, 0)
 
 # Production of Z begins when activated X and Y accumulate past a certain
 # concentration. 
 @r=production_Z 
   X_a + Y_a -> Z + X_a + Y_a + 5120 ATP_spent
-  Beta_Enz * gt(X_a, K_xz) * gt(Y_a, K_yz)
+  Beta_Enz * X_a/(K_xz+X_a) * Y_a/(K_yz+Y_a) + Beta_B
 
 @r=production_ATP
   Z + S_x -> Z + 26 ATP_gained + S_x
@@ -140,7 +141,7 @@
 
 # Pulse distribution.
 @events
-  on1 = t > 2567 : S_x = 1 
+  on1 = t > 4800 : S_x = 1 
   off1 =  t > t_1 : S_x = -1 
-  on2  =  t > 10267 : S_x = 1
+  on2  =  t > 19200 : S_x = 1
   off2 =  t > t_2 : S_x = -1
